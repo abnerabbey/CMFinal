@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="twisterrave" size="479.000000 420.000000" />
+    <ImageTarget name="simonswipe" size="884.000000 870.000000" />
+    <ImageTarget name="operando" size="896.000000 560.000000" />
+    <ImageTarget name="monopolyimperio" size="450.000000 299.000000" />
+    <ImageTarget name="monopolybanco" size="600.000000 410.000000" />
+    <ImageTarget name="connect4" size="447.000000 378.000000" />
+    <ImageTarget name="atraparatones" size="889.000000 594.000000" />
+    <ImageTarget name="angrybirdsgo" size="896.000000 563.000000" />
+    <ImageTarget name="adivinaquien" size="400.000000 400.000000" />
+  </Tracking>
+</QCARConfig>
