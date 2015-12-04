@@ -27,6 +27,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var storesLocation = [CLLocationCoordinate2D]()
     var userLocation = CLLocationCoordinate2D()
     
+    var startCalculations = false
+    
     // MARK: OUTLETS
     
     @IBOutlet weak var storeName: UILabel!
@@ -144,12 +146,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     func displayStoreInLabel(index: Int) {
         
         // Display stores in View (labels)
-        storeName.text = storesInfo[index]["NAME"]!
+        storeName.text = "\(index+1). \(storesInfo[index]["NAME"]!)"
         storeDistance.text = "A \(storesInfo[index]["DISTTOUSER"]!) metros"
-        
-        // Display stores as pin buttons
-    
-        
     }
     
     /*
@@ -162,8 +160,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         for stores in storesInfo {
             if name == stores["NAME"] {
                 displayStoreInLabel(aux)
-            } else {
-                print("Something went wrong!")
             }
             aux++
         }
@@ -173,6 +169,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         startLocationServices()
         if mapParser.verifyValues() {
+            startCalculations = true
             print("Copiando valores desde XMLParser")
             mapParser.posts.append(["NAME": "Bodega Aurrera", "LONGITUDE": "-100.158607", "LATITUDE": "19.335284"])
             mapParser.posts.append(["NAME": "Superama", "LONGITUDE": "-98.158609", "LATITUDE": "19.235281"])
@@ -236,10 +233,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             if view == nil {
                 view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
                 view.canShowCallout = true
+                view.pinTintColor = UIColor.purpleColor()
                 view.animatesDrop = true
                 view.calloutOffset = CGPoint(x: -5, y: -5)
-                view.pinTintColor = UIColor.purpleColor()
-                view.image = UIImage(named: "A")
+                // view.image = UIImage(named: "pin2")
             } else {
                 view.annotation = annotation
             }
@@ -254,7 +251,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         userLocation = locationManager.location!.coordinate
         print("locations = \(userLocation.latitude) \(userLocation.longitude)")
         
-        calculateDistances()
-        displayStoreInLabel(displayIndex)
+        if(startCalculations) {
+            calculateDistances()
+            displayStoreInLabel(displayIndex)
+        }
     }
 }
