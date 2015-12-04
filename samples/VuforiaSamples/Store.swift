@@ -26,11 +26,6 @@ class Store: NSObject {
         let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         self.init(name: name, location: location, index: index)
     }
-    
-    /*func pinColor() -> UIColor {
-        return MKPinAnnotationView.greenPinColor()
-    }
-*/
 }
 
 @objc protocol Alertable {
