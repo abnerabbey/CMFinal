@@ -37,6 +37,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     @IBOutlet weak var infoLabelView: UILabel!
     @IBOutlet weak var closeInfoViewButton: UIButton!
     @IBOutlet weak var showInfoViewButton: UIButton!
+    @IBOutlet weak var infoNameLabel: UILabel!
+    @IBOutlet weak var infoDistanceLabel: UILabel!
+    @IBOutlet weak var infoTimeLabel: UILabel!
     
     @IBOutlet weak var mkMapView: MKMapView!
     
@@ -68,11 +71,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     @IBAction func closeInfoViewButtonTapped(sender: UIButton) {
+        infoView.hidden = true
+        showInfoViewButton.hidden = false
     }
     
     @IBAction func showInfoViewButtonTapped(sender: UIButton) {
+        infoView.hidden = false
+        showInfoViewButton.hidden = true
     }
-    
     
     // MARK: METHODS
     
@@ -197,32 +203,78 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         let directions = MKDirections(request: directionRequest)
         directions.calculateDirectionsWithCompletionHandler { (response: MKDirectionsResponse?, error: NSError?) -> Void in
+            
+            // Additional info labels for Route
+            
+            // Advisory Notices
+            self.infoLabelView.text = "Avisos: Ninguno"
             if let notices = response!.routes.first?.advisoryNotices {
                 for notice in notices {
-                    if notice == "This route requires tolls" {
+                    print("Notices: \(notice)")
+                }
+                self.infoLabelView.textColor = UIColor.blackColor()
+                self.infoLabelView.font = UIFont.systemFontOfSize(12)
+                for notice in notices {
+                    print(notice)
+                    if notice == "This route requires tolls." {
+                        self.infoLabelView.textColor = UIColor.redColor()
+                        self.infoLabelView.font = UIFont.boldSystemFontOfSize(12)
                         self.infoLabelView.text = "Avisos: Ruta con cuota"
+                    } else if notice == "This route ends on the road nearest to the selected destination." {
+                        self.infoLabelView.text = "Avisos: La ruta termina en el camino más cercano al destino"
+                    } else if notice == "" {
+                        self.infoLabelView.text = "Avisos: Ninguno"
                     } else {
-                        self.infoLabelView.text = "Avisos: \(notice)"
+                        self.infoLabelView.text = "Avisos: Ninguno"
                     }
                 }
             } else {
                 self.infoLabelView.text = "Avisos: Ninguno"
             }
             
-            for notices in (response?.routes.first?.advisoryNotices)! {
-                print(notices)
-                print("Distance to store is \(response!.routes.first?.distance)")
-                print("Expected travel time: \(response!.routes.first?.expectedTravelTime)")
-                print("Route name: \(response!.routes.first?.name)")
+            // Route Name
+            
+            if let name = response!.routes.first?.name {
+                self.infoNameLabel.text = "Avenida principal: \(name)"
+            } else {
+                self.infoNameLabel.text = "Avenida principal no disponible :("
             }
-            for step in (response?.routes.first?.steps)! {
-                print (step)
+            
+            // Route Distance
+            
+            if let distance = response!.routes.first?.distance {
+                self.infoDistanceLabel.text = "Distancia: \(distance) m."
+            } else {
+                self.infoDistanceLabel.text = "Distancia no disponible :("
             }
+            
+            // Route ETA
+            
+            if let time = response!.routes.first?.expectedTravelTime {
+                let time = 3727
+                if time >= 3600 {
+                    let seconds = time%60
+                    let minutes = ((time-seconds)%3600)/60
+                    let hours = (time-(time%3600))/3600
+                    self.infoTimeLabel.text = "A \(Int(hours))h \(Int(minutes))m \(Int(seconds))s"
+                } else if time>60 {
+                    let seconds = time%60
+                    let minutes = (time-(seconds))/60
+                    self.infoTimeLabel.text = "A \(Int(minutes))m \(Int(seconds))s"
+                } else {
+                    self.infoTimeLabel.text = "A \(time)s"
+                }
+            } else {
+                self.infoTimeLabel.text = "Tiempo de ruta no disponible :("
+            }
+
             if self.mkMapView.overlays.count != 0 {
                 self.mkMapView.removeOverlays(self.mkMapView.overlays)
             }
             self.mkMapView.addOverlay((response?.routes.first?.polyline as? MKOverlay)!)
         }
+        infoView.hidden = false
+        showInfoViewButton.hidden = true
     }
     
     override func viewDidLoad() {
@@ -333,70 +385,3 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
