@@ -33,6 +33,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     @IBOutlet weak var storeName: UILabel!
     @IBOutlet weak var storeDistance: UILabel!
+    @IBOutlet weak var infoView: UIView!
+    @IBOutlet weak var infoLabelView: UILabel!
+    @IBOutlet weak var closeInfoViewButton: UIButton!
+    @IBOutlet weak var showInfoViewButton: UIButton!
     
     @IBOutlet weak var mkMapView: MKMapView!
     
@@ -62,6 +66,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
         displayStoreInLabel(displayIndex)
     }
+    
+    @IBAction func closeInfoViewButtonTapped(sender: UIButton) {
+    }
+    
+    @IBAction func showInfoViewButtonTapped(sender: UIButton) {
+    }
+    
     
     // MARK: METHODS
     
@@ -170,6 +181,50 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
     }
     
+    func getDirections() {
+        let auxLat = CLLocationDegrees(storesInfo[displayIndex]["LATITUDE"]!)!
+        let auxLon = CLLocationDegrees(storesInfo[displayIndex]["LONGITUDE"]!)!
+        let destCoordinate = CLLocationCoordinate2D(latitude: auxLat, longitude: auxLon)
+        let destinationPlace = MKPlacemark(coordinate: destCoordinate, addressDictionary: nil)
+        let destination = MKMapItem(placemark: destinationPlace)
+        
+        let currentPosition = MKMapItem.mapItemForCurrentLocation()
+        
+        let directionRequest = MKDirectionsRequest()
+        directionRequest.destination = destination
+        directionRequest.source = currentPosition
+        directionRequest.requestsAlternateRoutes = false
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculateDirectionsWithCompletionHandler { (response: MKDirectionsResponse?, error: NSError?) -> Void in
+            if let notices = response!.routes.first?.advisoryNotices {
+                for notice in notices {
+                    if notice == "This route requires tolls" {
+                        self.infoLabelView.text = "Avisos: Ruta con cuota"
+                    } else {
+                        self.infoLabelView.text = "Avisos: \(notice)"
+                    }
+                }
+            } else {
+                self.infoLabelView.text = "Avisos: Ninguno"
+            }
+            
+            for notices in (response?.routes.first?.advisoryNotices)! {
+                print(notices)
+                print("Distance to store is \(response!.routes.first?.distance)")
+                print("Expected travel time: \(response!.routes.first?.expectedTravelTime)")
+                print("Route name: \(response!.routes.first?.name)")
+            }
+            for step in (response?.routes.first?.steps)! {
+                print (step)
+            }
+            if self.mkMapView.overlays.count != 0 {
+                self.mkMapView.removeOverlays(self.mkMapView.overlays)
+            }
+            self.mkMapView.addOverlay((response?.routes.first?.polyline as? MKOverlay)!)
+        }
+    }
+    
     override func viewDidLoad() {
         
         startLocationServices()
@@ -275,39 +330,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         if(startCalculations) {
             calculateDistances()
             displayStoreInLabel(displayIndex)
-        }
-    }
-    
-    func getDirections() {
-        let auxLat = CLLocationDegrees(storesInfo[displayIndex]["LATITUDE"]!)!
-        let auxLon = CLLocationDegrees(storesInfo[displayIndex]["LONGITUDE"]!)!
-        let destCoordinate = CLLocationCoordinate2D(latitude: auxLat, longitude: auxLon)
-        let destinationPlace = MKPlacemark(coordinate: destCoordinate, addressDictionary: nil)
-        let destination = MKMapItem(placemark: destinationPlace)
-        
-        let currentPosition = MKMapItem.mapItemForCurrentLocation()
-        
-        let directionRequest = MKDirectionsRequest()
-        directionRequest.destination = destination
-        directionRequest.source = currentPosition
-        directionRequest.requestsAlternateRoutes = false
-        
-        let directions = MKDirections(request: directionRequest)
-        directions.calculateDirectionsWithCompletionHandler { (response: MKDirectionsResponse?, error: NSError?) -> Void in
-            for notices in (response?.routes.first?.advisoryNotices)! {
-                print(notices)
-                print("Distance to store is \(response!.routes.first?.distance)")
-                print("Expected travel time: \(response!.routes.first?.expectedTravelTime)")
-                print("Route name: \(response!.routes.first?.name)")
-                print("Transport type: \(response!.routes.first?.transportType)")
-            }
-            for step in (response?.routes.first?.steps)! {
-                print (step)
-            }
-            if self.mkMapView.overlays.count != 0 {
-                self.mkMapView.removeOverlays(self.mkMapView.overlays)
-            }
-            self.mkMapView.addOverlay((response?.routes.first?.polyline as? MKOverlay)!)
         }
     }
 }
