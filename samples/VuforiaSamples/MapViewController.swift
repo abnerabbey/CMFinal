@@ -294,6 +294,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         let directions = MKDirections(request: directionRequest)
         directions.calculateDirectionsWithCompletionHandler { (response: MKDirectionsResponse?, error: NSError?) -> Void in
+            for notices in (response?.routes.first?.advisoryNotices)! {
+                print(notices)
+                print("Distance to store is \(response!.routes.first?.distance)")
+                print("Expected travel time: \(response!.routes.first?.expectedTravelTime)")
+                print("Route name: \(response!.routes.first?.name)")
+                print("Transport type: \(response!.routes.first?.transportType)")
+            }
+            for step in (response?.routes.first?.steps)! {
+                print (step)
+            }
             if self.mkMapView.overlays.count != 0 {
                 self.mkMapView.removeOverlays(self.mkMapView.overlays)
             }
