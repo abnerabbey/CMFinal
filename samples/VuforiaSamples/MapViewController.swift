@@ -40,6 +40,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var locationManager: CLLocationManager!
 
     // MARK: ACTIONS
+    @IBAction func getDirectionsButtonPressed(sender: UIButton) {
+        if(startCalculations) {
+            getDirections()
+        }
+    }
     
     @IBAction func navigateList(sender: UIButton) {
         if sender.tag == 0 {        // LEFT
@@ -185,8 +190,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 mkAnnotationStores.append(Store(name: auxTitle, latitude: auxLatitude, longitude: auxLongitude, index: auxCounter))
                 auxCounter++
                 
-                //Aquí voy a obtener las direcciones desde el usuario hasta las stores :)
-                self.getDirections(auxLatitude, longitud: auxLongitude)
+                // Aquí voy a obtener las direcciones desde el usuario hasta las stores :)
+                // self.getDirections(auxLatitude, longitud: auxLongitude)
             }
             /*
             mkAnnotationStores.append(Store(name: "Tú", latitude: userLocation.latitude, longitude: userLocation.longitude))
@@ -273,9 +278,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }
     }
     
-    func getDirections(latitude: Double, longitud: Double)
-    {
-        let destCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitud)
+    func getDirections() {
+        let auxLat = CLLocationDegrees(storesInfo[displayIndex]["LATITUDE"]!)!
+        let auxLon = CLLocationDegrees(storesInfo[displayIndex]["LONGITUDE"]!)!
+        let destCoordinate = CLLocationCoordinate2D(latitude: auxLat, longitude: auxLon)
         let destinationPlace = MKPlacemark(coordinate: destCoordinate, addressDictionary: nil)
         let destination = MKMapItem(placemark: destinationPlace)
         
@@ -288,11 +294,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         let directions = MKDirections(request: directionRequest)
         directions.calculateDirectionsWithCompletionHandler { (response: MKDirectionsResponse?, error: NSError?) -> Void in
+            if self.mkMapView.overlays.count != 0 {
+                self.mkMapView.removeOverlays(self.mkMapView.overlays)
+            }
             self.mkMapView.addOverlay((response?.routes.first?.polyline as? MKOverlay)!)
         }
-        
     }
-    
 }
 
 
