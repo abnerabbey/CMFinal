@@ -685,9 +685,9 @@
                                         <rect key="frame" x="174" y="22" width="138" height="34"/>
                                         <animations/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="138" id="xqS-7y-bfm"/>
+                                            <constraint firstAttribute="width" constant="138" id="OaQ-s1-zMz"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -695,21 +695,21 @@
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="bottom" secondItem="ZpQ-xU-dhe" secondAttribute="bottom" id="07a-K9-XJL"/>
                                     <constraint firstItem="MAh-eJ-aao" firstAttribute="trailing" secondItem="Jvg-UJ-p8R" secondAttribute="trailingMargin" id="0gz-SU-XLv"/>
-                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="leading" secondItem="UVB-GE-pbC" secondAttribute="trailing" id="ASg-HR-GGZ"/>
+                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="leading" secondItem="UVB-GE-pbC" secondAttribute="trailing" id="3lN-Kg-fg8"/>
                                     <constraint firstItem="MAh-eJ-aao" firstAttribute="leading" secondItem="uLJ-JR-3X4" secondAttribute="trailing" constant="8" symbolic="YES" id="C34-QG-u5n"/>
-                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="trailing" secondItem="MAh-eJ-aao" secondAttribute="trailing" id="CFx-6d-v3Y"/>
                                     <constraint firstItem="uLJ-JR-3X4" firstAttribute="leading" secondItem="Jvg-UJ-p8R" secondAttribute="leadingMargin" id="DAE-g8-3zq"/>
                                     <constraint firstAttribute="width" secondItem="Jvg-UJ-p8R" secondAttribute="height" multiplier="16:3" id="F3p-Dc-aap"/>
-                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="top" secondItem="UVB-GE-pbC" secondAttribute="top" id="NUp-VJ-Kt8"/>
                                     <constraint firstAttribute="bottom" secondItem="ZpQ-xU-dhe" secondAttribute="bottom" constant="4" id="Pd3-Nw-Hpg"/>
-                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="baseline" secondItem="ZpQ-xU-dhe" secondAttribute="firstBaseline" id="Y2K-9J-GBV"/>
+                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="trailing" secondItem="MAh-eJ-aao" secondAttribute="trailing" id="Ykn-jF-koV"/>
                                     <constraint firstItem="uLJ-JR-3X4" firstAttribute="bottom" secondItem="MAh-eJ-aao" secondAttribute="bottom" id="cZc-Js-59u"/>
                                     <constraint firstItem="uLJ-JR-3X4" firstAttribute="leading" secondItem="UVB-GE-pbC" secondAttribute="leading" id="dwX-rh-RgZ"/>
                                     <constraint firstItem="UVB-GE-pbC" firstAttribute="top" secondItem="uLJ-JR-3X4" secondAttribute="bottom" constant="2" id="ePG-8E-fgP"/>
                                     <constraint firstItem="uLJ-JR-3X4" firstAttribute="top" secondItem="MAh-eJ-aao" secondAttribute="top" id="gqN-UT-Uzd"/>
                                     <constraint firstItem="MAh-eJ-aao" firstAttribute="top" secondItem="Jvg-UJ-p8R" secondAttribute="top" constant="4" id="haE-Hy-Ndm"/>
                                     <constraint firstItem="ZpQ-xU-dhe" firstAttribute="top" secondItem="UVB-GE-pbC" secondAttribute="bottom" constant="2" id="nge-QR-34g"/>
+                                    <constraint firstItem="R1t-mt-UDg" firstAttribute="top" secondItem="UVB-GE-pbC" secondAttribute="top" id="qJp-3W-cuq"/>
                                     <constraint firstItem="ZpQ-xU-dhe" firstAttribute="leading" secondItem="UVB-GE-pbC" secondAttribute="leading" id="xjb-sS-cH6"/>
                                 </constraints>
                             </view>
