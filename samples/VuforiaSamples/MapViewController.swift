@@ -292,12 +292,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         startLocationServices()
         if mapParser.verifyValues() {
             startCalculations = true
-            print("Copiando valores desde XMLParser")
-            mapParser.posts.append(["NAME": "Bodega Aurrera", "LONGITUDE": "-100.158607", "LATITUDE": "19.335284"])
-            mapParser.posts.append(["NAME": "Superama", "LONGITUDE": "-98.158609", "LATITUDE": "19.235281"])
-            mapParser.posts.append(["NAME": "OXXO Cuajimalpa", "LONGITUDE": "-98.158611", "LATITUDE": "19.335282"])
-            mapParser.posts.append(["NAME": "Seven Eleven", "LONGITUDE": "-98.158600", "LATITUDE": "19.335287"])
-            mapParser.posts.append(["NAME": "Comercial Mexicana", "LONGITUDE": "-98.158601", "LATITUDE": "19.335288"])
             var auxCounter = 0
             for stores in mapParser.posts {
                 storesInfo.append(stores)
