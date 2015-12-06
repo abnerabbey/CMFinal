@@ -254,7 +254,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             // Route Distance
             
             if let distance = response!.routes.first?.distance {
-                self.infoDistanceLabel.text = "Distancia en auto: \(distance) m"
+                self.infoDistanceLabel.text = "Distancia total: \(distance) m"
             } else {
                 self.infoDistanceLabel.text = "Distancia no disponible :("
             }
