@@ -30,6 +30,11 @@
 		07E0FE8F1C0D513200CD34A1 /* compujuegos.xml in Resources */ = {isa = PBXBuildFile; fileRef = 07E0FE8E1C0D513200CD34A1 /* compujuegos.xml */; };
 		07E0FE901C0D535400CD34A1 /* compujuegos.dat in Resources */ = {isa = PBXBuildFile; fileRef = 07E0FE8D1C0D4E6B00CD34A1 /* compujuegos.dat */; };
 		18EB634C1ACC70F200EF1C28 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 18EB634B1ACC70F200EF1C28 /* Localizable.strings */; };
+		A9A3A69E1C147EC10007C664 /* backgroundTheme.wav in Resources */ = {isa = PBXBuildFile; fileRef = A9A3A6991C147EC10007C664 /* backgroundTheme.wav */; };
+		A9A3A69F1C147EC10007C664 /* rightAnswer.wav in Resources */ = {isa = PBXBuildFile; fileRef = A9A3A69A1C147EC10007C664 /* rightAnswer.wav */; };
+		A9A3A6A01C147EC10007C664 /* rightLetter.wav in Resources */ = {isa = PBXBuildFile; fileRef = A9A3A69B1C147EC10007C664 /* rightLetter.wav */; };
+		A9A3A6A11C147EC10007C664 /* wrongAnswer.wav in Resources */ = {isa = PBXBuildFile; fileRef = A9A3A69C1C147EC10007C664 /* wrongAnswer.wav */; };
+		A9A3A6A21C147EC10007C664 /* wrongLetter.wav in Resources */ = {isa = PBXBuildFile; fileRef = A9A3A69D1C147EC10007C664 /* wrongLetter.wav */; };
 		D21B07EC1A1B4AA20041ECF3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D21B07EB1A1B4AA20041ECF3 /* main.m */; };
 		D21B07EF1A1B4AA20041ECF3 /* VuforiaSamplesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D21B07EE1A1B4AA20041ECF3 /* VuforiaSamplesAppDelegate.m */; };
 		D21B07F71A1B4AA20041ECF3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D21B07F61A1B4AA20041ECF3 /* Images.xcassets */; };
@@ -167,6 +172,11 @@
 		07E0FE8D1C0D4E6B00CD34A1 /* compujuegos.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = compujuegos.dat; sourceTree = "<group>"; };
 		07E0FE8E1C0D513200CD34A1 /* compujuegos.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = compujuegos.xml; sourceTree = "<group>"; };
 		18EB634B1ACC70F200EF1C28 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		A9A3A6991C147EC10007C664 /* backgroundTheme.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = backgroundTheme.wav; path = Library/Caches/backgroundTheme.wav; sourceTree = "<group>"; };
+		A9A3A69A1C147EC10007C664 /* rightAnswer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = rightAnswer.wav; path = Library/Caches/rightAnswer.wav; sourceTree = "<group>"; };
+		A9A3A69B1C147EC10007C664 /* rightLetter.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = rightLetter.wav; path = Library/Caches/rightLetter.wav; sourceTree = "<group>"; };
+		A9A3A69C1C147EC10007C664 /* wrongAnswer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = wrongAnswer.wav; path = Library/Caches/wrongAnswer.wav; sourceTree = "<group>"; };
+		A9A3A69D1C147EC10007C664 /* wrongLetter.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = wrongLetter.wav; path = Library/Caches/wrongLetter.wav; sourceTree = "<group>"; };
 		D21B07E61A1B4AA20041ECF3 /* Vuforia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vuforia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21B07EB1A1B4AA20041ECF3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D21B07ED1A1B4AA20041ECF3 /* VuforiaSamplesAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VuforiaSamplesAppDelegate.h; sourceTree = "<group>"; };
@@ -358,6 +368,11 @@
 		07A6F6E11C109CD200DF6E10 /* CMFinal */ = {
 			isa = PBXGroup;
 			children = (
+				A9A3A6991C147EC10007C664 /* backgroundTheme.wav */,
+				A9A3A69A1C147EC10007C664 /* rightAnswer.wav */,
+				A9A3A69B1C147EC10007C664 /* rightLetter.wav */,
+				A9A3A69C1C147EC10007C664 /* wrongAnswer.wav */,
+				A9A3A69D1C147EC10007C664 /* wrongLetter.wav */,
 				07A6F6E31C109D4900DF6E10 /* Assets.xcassets */,
 				07A6F6E41C109D4900DF6E10 /* Scanner@2x.png */,
 				07A6F6E51C109D4900DF6E10 /* ahorcadito@2x.png */,
@@ -877,6 +892,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07E0FE901C0D535400CD34A1 /* compujuegos.dat in Resources */,
+				A9A3A6A01C147EC10007C664 /* rightLetter.wav in Resources */,
 				07E0FE4B1C0CB84000CD34A1 /* libVuforia.a in Resources */,
 				FB5190BE1A9F613800729216 /* CR.png in Resources */,
 				FB7A43391A8E376B0068CF5E /* TextureTeapotBlue.png in Resources */,
@@ -894,6 +910,7 @@
 				FB7A432B1A8E376B0068CF5E /* IT_about.html in Resources */,
 				FB7A43411A8E376B0068CF5E /* button_cancel_pressed@2x.png in Resources */,
 				FB7A432A1A8E376B0068CF5E /* letter_R.png in Resources */,
+				A9A3A69E1C147EC10007C664 /* backgroundTheme.wav in Resources */,
 				18EB634C1ACC70F200EF1C28 /* Localizable.strings in Resources */,
 				D23617831A933AD7009A2192 /* VB.png in Resources */,
 				FB7A43441A8E376B0068CF5E /* custom_toolbar_texture.png in Resources */,
@@ -907,6 +924,8 @@
 				FB7A43451A8E376B0068CF5E /* custom_toolbar_texture@2x.png in Resources */,
 				FB7A43491A8E376B0068CF5E /* VB_about.html in Resources */,
 				FB7A432D1A8E376B0068CF5E /* StonesAndChips.xml in Resources */,
+				A9A3A69F1C147EC10007C664 /* rightAnswer.wav in Resources */,
+				A9A3A6A11C147EC10007C664 /* wrongAnswer.wav in Resources */,
 				D2DC72BA1A8F5F9200A62FCD /* MT.png in Resources */,
 				FB7A43351A8E376B0068CF5E /* CubeWireframe.png in Resources */,
 				FB7A432E1A8E376B0068CF5E /* Tarmac.dat in Resources */,
@@ -944,6 +963,7 @@
 				FB7A432C1A8E376B0068CF5E /* StonesAndChips.dat in Resources */,
 				FB7A432F1A8E376B0068CF5E /* Tarmac.xml in Resources */,
 				FB7A43261A8E376B0068CF5E /* FM_about.html in Resources */,
+				A9A3A6A21C147EC10007C664 /* wrongLetter.wav in Resources */,
 				FB7A43221A8E376B0068CF5E /* sodacan.dat in Resources */,
 				D23617851A933BE5009A2192 /* FM.png in Resources */,
 				FB5190C01A9F62C100729216 /* TR.png in Resources */,

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class AhorcadoViewController: UIViewController {
     
@@ -29,8 +30,23 @@ class AhorcadoViewController: UIViewController {
     @IBOutlet var letterOutlet: [UIButton]!
     @IBOutlet var hangman: [UIImageView]!
     
-
+    // MARK: SOUNDS
+    
+    var backgroundTheme = SystemSoundID()
+    var wrongLetter = SystemSoundID()
+    var rightLetter = SystemSoundID()
+    var wrongAnswer = SystemSoundID()
+    var rightAnswer = SystemSoundID()
+    
     // MARK: METHODS
+    
+    func createSound(soundName: String) -> SystemSoundID {
+        var soundID: SystemSoundID = 0
+        let soundURL = CFBundleCopyResourceURL(CFBundleGetMainBundle(), soundName, "wav", nil)
+        AudioServicesCreateSystemSoundID(soundURL, &soundID)
+        // CFRelease(soundURL)
+        return soundID
+    }
     
     func fetchWords() {
         
@@ -51,22 +67,6 @@ class AhorcadoViewController: UIViewController {
         } else {
             print("No word was found!")
         }
-        
-        /*if let catOp = category {
-            category = String(ahorcadoXML.elements.objectForKey("CATEGORIA")!)
-            categoryLabel.text = catOp
-        }
-        else {
-            print("category value is nil")
-        }
-        if let wordOp = word {
-            word = String(ahorcadoXML.elements.objectForKey("PALABRA")!)
-            wordLabel.text = wordOp
-        }
-        else {
-            print("word value is nil")
-        }
-        */
     }
 
     func displayWordHidden(word: String) {
@@ -158,17 +158,23 @@ class AhorcadoViewController: UIViewController {
             }
             i++
         }
-        if !coincidence {
+        
+        if coincidence {
+            AudioServicesPlaySystemSound(rightLetter)
+        } else if !coincidence {
+            AudioServicesPlaySystemSound(wrongLetter)
             hangman[errors].hidden = false
             errors++
         }
         
         if errors >= 6 {
+            AudioServicesPlaySystemSound(wrongAnswer)
             print("YOU'VE LOST!")
             gameEnded("¡Has perdido! :(", message: "La respuesta es \(word!)\nPresiona OK para iniciar un nuevo juego")
         }
         
         if rightGuesses >= word?.characters.count {
+            AudioServicesPlaySystemSound(rightAnswer)
             print("YOU'VE WON!!!!!!!!!! :D")
             gameEnded("¡Has ganado! :D", message: "Presiona OK para iniciar un nuevo juego")
         }
@@ -210,6 +216,17 @@ class AhorcadoViewController: UIViewController {
     }
     
     // MARK: METHODS
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        backgroundTheme = createSound("backgroundTheme")
+        wrongLetter = createSound("wrongLetter")
+        rightLetter = createSound("rightLetter")
+        wrongAnswer = createSound("wrongAnswer")
+        rightAnswer = createSound("rightAnswer")
+        AudioServicesPlaySystemSound(backgroundTheme)
+    }
     
     override func viewDidLoad() {
         
