@@ -33,6 +33,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     @IBOutlet weak var storeName: UILabel!
     @IBOutlet weak var storeDistance: UILabel!
+    @IBOutlet weak var infoView: UIView!
+    @IBOutlet weak var infoLabelView: UILabel!
+    @IBOutlet weak var closeInfoViewButton: UIButton!
+    @IBOutlet weak var showInfoViewButton: UIButton!
+    @IBOutlet weak var infoNameLabel: UILabel!
+    @IBOutlet weak var infoDistanceLabel: UILabel!
+    @IBOutlet weak var infoTimeLabel: UILabel!
     
     @IBOutlet weak var mkMapView: MKMapView!
     
@@ -40,6 +47,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var locationManager: CLLocationManager!
 
     // MARK: ACTIONS
+    @IBAction func getDirectionsButtonPressed(sender: UIButton) {
+        if(startCalculations) {
+            getDirections()
+        }
+    }
     
     @IBAction func navigateList(sender: UIButton) {
         if sender.tag == 0 {        // LEFT
@@ -56,6 +68,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             }
         }
         displayStoreInLabel(displayIndex)
+        mkMapView.selectAnnotation(findAnnotation(displayIndex), animated: true)
+    }
+    
+    @IBAction func closeInfoViewButtonTapped(sender: UIButton) {
+        infoView.hidden = true
+        showInfoViewButton.hidden = false
+    }
+    
+    @IBAction func showInfoViewButtonTapped(sender: UIButton) {
+        infoView.hidden = false
+        showInfoViewButton.hidden = true
     }
     
     // MARK: METHODS
@@ -150,6 +173,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         storeDistance.text = "A \(storesInfo[index]["DISTTOUSER"]!) metros"
     }
     
+    func findAnnotation(index: Int) -> MKAnnotation{
+        let name = storesInfo[index]["NAME"]
+        var aux:Int = 0
+        var annotationIndex:Int = 0
+        for mkStore in mkAnnotationStores {
+            if mkStore.name == name {
+                annotationIndex = aux
+            }
+            aux++
+        }
+        return mkAnnotationStores[annotationIndex]
+    }
+    
     /*
     HARDCODED METHOD. When user selects a Pin in mapView, this method searches for the Store Title and if it is found, changes the text label in the lower view.
     Ideal solution to this would be to add a field in Store (such as an Int index) and use displayStoreInLabel with that index. This doesn't work because up till now, no way to increment the auxCounter has been found, at the moment when the MKPinAnnotationView are created
@@ -163,6 +199,92 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             }
             aux++
         }
+    }
+    
+    func getDirections() {
+        let auxLat = CLLocationDegrees(storesInfo[displayIndex]["LATITUDE"]!)!
+        let auxLon = CLLocationDegrees(storesInfo[displayIndex]["LONGITUDE"]!)!
+        let destCoordinate = CLLocationCoordinate2D(latitude: auxLat, longitude: auxLon)
+        let destinationPlace = MKPlacemark(coordinate: destCoordinate, addressDictionary: nil)
+        let destination = MKMapItem(placemark: destinationPlace)
+        
+        let currentPosition = MKMapItem.mapItemForCurrentLocation()
+        
+        let directionRequest = MKDirectionsRequest()
+        directionRequest.destination = destination
+        directionRequest.source = currentPosition
+        directionRequest.requestsAlternateRoutes = false
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculateDirectionsWithCompletionHandler { (response: MKDirectionsResponse?, error: NSError?) -> Void in
+            
+            // Additional info labels for Route
+            
+            // Advisory Notices
+            
+            self.infoLabelView.text = "Avisos: Ninguno"
+            if let notices = response!.routes.first?.advisoryNotices {
+                self.infoLabelView.textColor = UIColor.blackColor()
+                self.infoLabelView.font = UIFont.systemFontOfSize(12)
+                for notice in notices {
+                    if notice == "This route requires tolls." {
+                        self.infoLabelView.textColor = UIColor.redColor()
+                        self.infoLabelView.font = UIFont.boldSystemFontOfSize(12)
+                        self.infoLabelView.text = "Avisos: Ruta con cuota"
+                    } else if notice == "This route ends on the road nearest to the selected destination." {
+                        self.infoLabelView.text = "Avisos: Final de la ruta sin pavimento"
+                    } else if notice == "" {
+                        self.infoLabelView.text = "Avisos: Ninguno"
+                    } else {
+                        self.infoLabelView.text = "Avisos: Ninguno"
+                    }
+                }
+            } else {
+                self.infoLabelView.text = "Avisos: Ninguno"
+            }
+            
+            // Route Name
+            
+            if let name = response!.routes.first?.name {
+                self.infoNameLabel.text = "Avenida principal: \(name)"
+            } else {
+                self.infoNameLabel.text = "Avenida principal no disponible :("
+            }
+            
+            // Route Distance
+            
+            if let distance = response!.routes.first?.distance {
+                self.infoDistanceLabel.text = "Distancia en auto: \(distance) m"
+            } else {
+                self.infoDistanceLabel.text = "Distancia no disponible :("
+            }
+            
+            // Route ETA
+            
+            if let time = response!.routes.first?.expectedTravelTime {
+                if time >= 3600 {
+                    let seconds = time%60
+                    let minutes = ((time-seconds)%3600)/60
+                    let hours = (time-(time%3600))/3600
+                    self.infoTimeLabel.text = "A \(Int(hours))h \(Int(minutes))m \(Int(seconds))s"
+                } else if time>60 {
+                    let seconds = time%60
+                    let minutes = (time-(seconds))/60
+                    self.infoTimeLabel.text = "A \(Int(minutes))m \(Int(seconds))s"
+                } else {
+                    self.infoTimeLabel.text = "A \(time)s"
+                }
+            } else {
+                self.infoTimeLabel.text = "Tiempo de ruta no disponible :("
+            }
+
+            if self.mkMapView.overlays.count != 0 {
+                self.mkMapView.removeOverlays(self.mkMapView.overlays)
+            }
+            self.mkMapView.addOverlay((response?.routes.first?.polyline as? MKOverlay)!)
+        }
+        infoView.hidden = false
+        showInfoViewButton.hidden = true
     }
     
     override func viewDidLoad() {
@@ -184,13 +306,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 let auxLongitude: Double = Double(stores["LONGITUDE"]!)!
                 mkAnnotationStores.append(Store(name: auxTitle, latitude: auxLatitude, longitude: auxLongitude, index: auxCounter))
                 auxCounter++
-                
-                //Aquí voy a obtener las direcciones desde el usuario hasta las stores :)
-                self.getDirections(auxLatitude, longitud: auxLongitude)
             }
-            /*
-            mkAnnotationStores.append(Store(name: "Tú", latitude: userLocation.latitude, longitude: userLocation.longitude))
-            */
             
             self.mkMapView.delegate = self
             self.mkMapView.addAnnotations(self.mkAnnotationStores)
@@ -202,7 +318,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             }
             
             self.mkMapView.setVisibleMapRect(rectToDisplay, edgePadding: UIEdgeInsetsMake(CGFloat(200), CGFloat(200), CGFloat(200), CGFloat(200)), animated: false)
-            // calculateDistances()
+            
         } else {
             let noConnectionController = UIAlertController(title: "Conexión no establecida", message: "El servidor no está disponible o no tienes acceso a Internet. Intenta más tarde.", preferredStyle: UIAlertControllerStyle.Alert)
             noConnectionController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { (UIAlertAction: UIAlertAction) -> Void in
@@ -253,7 +369,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             let route = overlay as! MKPolyline
             let polyline = MKPolylineRenderer(polyline: route)
             polyline.lineWidth = 5.0
-            polyline.strokeColor = UIColor(red: 105/255.0, green: 94/255.0, blue: 133/255.0, alpha: 1.0)
+            polyline.strokeColor = UIColor(red: 46/255.0, green: 204/255.0, blue: 113/255.0, alpha: 1.0)
             return polyline
         }
         else{
@@ -272,92 +388,4 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             displayStoreInLabel(displayIndex)
         }
     }
-    
-    func getDirections(latitude: Double, longitud: Double)
-    {
-        let destCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitud)
-        let destinationPlace = MKPlacemark(coordinate: destCoordinate, addressDictionary: nil)
-        let destination = MKMapItem(placemark: destinationPlace)
-        
-        let currentPosition = MKMapItem.mapItemForCurrentLocation()
-        
-        let directionRequest = MKDirectionsRequest()
-        directionRequest.destination = destination
-        directionRequest.source = currentPosition
-        directionRequest.requestsAlternateRoutes = false
-        
-        let directions = MKDirections(request: directionRequest)
-        directions.calculateDirectionsWithCompletionHandler { (response: MKDirectionsResponse?, error: NSError?) -> Void in
-            self.mkMapView.addOverlay((response?.routes.first?.polyline as? MKOverlay)!)
-        }
-        
-    }
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
